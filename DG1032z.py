@@ -12,9 +12,9 @@ import vxi11
 
 class DG1032Z(vxi11.Instrument):
 
-    def __init__(self, '192.168.2.72'):
-        
-        super(DG1032Z, self).__init__(host)
+    def __init__(self, host):
+        self.host = host
+        super(DG1032Z, self).__init__(self.host)
 
     
     def write_string(self, cmd):
@@ -31,20 +31,9 @@ class DG1032Z(vxi11.Instrument):
 
     
     def check_conn(self):
-        self.get_dev_id()
+        try:
+            self.get_dev_id()
+        except:
+            print('Unknown error occured')
 
-
-def main():
-    instrInst = DG1032Z('192.168.2.72')
     
-    try:
-        instrInst.write_string("*IDN?\n\n\n")
-
-        instrInst.write_string(':SOUR1:APPL:SIN 1000,0.1,0,0')
-    
-    except:
-        print('error')
-
-    raw_input("Press any key to continue\n\n")
-    instrInst.write_string(':SOUR1:APPL:SIN 1000,1,0,0')
-
